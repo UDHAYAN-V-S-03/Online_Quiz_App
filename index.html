@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Quiz Application</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="main-wrapper">
+      <div class="mode-box">
+        <button id="theme-toggle" class="theme-toggle-btn">
+          ☀️ Light Mode
+        </button>
+      </div>
+
+      <div class="app-container">
+        <div class="content-box active" id="config-screen">
+          <header>
+            <h1>Quiz Setup</h1>
+            <p class="subtitle">Personalize your knowledge challenge.</p>
+          </header>
+
+          <div class="config-inner-box">
+            <form id="quiz-config-form">
+              <div class="form-group">
+                <label for="num-questions">Questions Count:</label>
+                <select id="num-questions" required>
+                  <option value="5">5 Questions</option>
+                  <option value="10" selected>10 Questions</option>
+                  <option value="15">15 Questions</option>
+                  <option value="20">20 Questions</option>
+                  <option value="30">30 Questions</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category">
+                  <option value="any">Any Category</option>
+                  <option value="9">General Knowledge</option>
+                  <option value="10">Entertainment: Books</option>
+                  <option value="11">Entertainment: Film</option>
+                  <option value="12">Entertainment: Music</option>
+                  <option value="13">Entertainment: Musicals & Theatres</option>
+                  <option value="14">Entertainment: Television</option>
+                  <option value="15">Entertainment: Video Games</option>
+                  <option value="16">Entertainment: Board Games</option>
+                  <option value="17">Science & Nature</option>
+                  <option value="18">Science: Computers</option>
+                  <option value="19">Science: Mathematics</option>
+                  <option value="20">Mythology</option>
+                  <option value="21">Sports</option>
+                  <option value="22">Geography</option>
+                  <option value="23">History</option>
+                  <option value="24">Politics</option>
+                  <option value="25">Art</option>
+                  <option value="26">Celebrities</option>
+                  <option value="27">Animals</option>
+                  <option value="28">Vehicles</option>
+                  <option value="29">Entertainment: Comics</option>
+                  <option value="30">Science: Gadgets</option>
+                  <option value="31">
+                    Entertainment: Japanese Anime & Manga
+                  </option>
+                  <option value="32">
+                    Entertainment: Cartoon & Animations
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty">
+                  <option value="">Any Difficulty</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="type">Question Type:</label>
+                <select id="type">
+                  <option value="">Any Type</option>
+                  <option value="multiple">Multiple Choice</option>
+                  <option value="boolean">True / False</option>
+                </select>
+              </div>
+
+              <button type="submit" class="start-btn">Start Quiz</button>
+            </form>
+          </div>
+
+          <p class="note">
+            <small>Data powered by the Open Trivia Database API.</small>
+          </p>
+        </div>
+
+        <div class="content-box" id="quiz-screen">
+          <div class="quiz-header-top">
+            <div class="context-info">
+              <span id="quiz-category">Category: Loading</span>
+              <span id="quiz-difficulty">Difficulty: Loading</span>
+            </div>
+            <div class="quiz-controls">
+              <span id="question-timer" class="timer-display">
+                  15s
+                  <div id="timer-progress-bar" class="timer-progress-bar"></div>
+              </span>
+              <button id="exit-quiz-btn" class="exit-btn">✕</button>
+            </div>
+          </div>
+
+          <div class="quiz-header-bottom">
+            <div class="progress-container">
+              <div id="progress-bar" class="progress-bar"></div>
+              <span id="progress-text" class="progress-text"
+                >Question 0 of 0</span
+              >
+            </div>
+          </div>
+
+          <div class="quiz-body">
+            <div id="loading-overlay" class="loading-overlay">
+                <div class="spinner"></div>
+                <p>Fetching questions, please wait...</p>
+            </div>
+
+            <div class="question-box">
+              <h2 id="question-text">Loading Question...</h2>
+            </div>
+
+            <div id="options-container" class="options-grid" role="radiogroup" aria-label="Question options"></div>
+
+            <button id="next-question-btn" class="next-btn" disabled>
+              Next Question &raquo;
+            </button>
+          </div>
+        </div>
+
+        <div class="content-box" id="review-screen">
+            <header>
+                <h1>Quiz Review</h1>
+                <p class="subtitle">Check your answers and learn from your mistakes.</p>
+            </header>
+
+            <div id="review-container">
+                </div>
+
+            <button id="review-to-menu-btn" class="start-btn">Exit to Main Menu</button>
+
+            <p class="note">
+                <small>Data powered by the Open Trivia Database API.</small>
+            </p>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="preview-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Confirm Quiz Settings</h2>
+        <div id="quiz-summary" class="summary-details"></div>
+
+        <p class="note-modal">
+          <small
+            >The quiz will start after a brief countdown. Questions fetched from
+            Open Trivia DB.</small
+          >
+        </p>
+
+        <div class="countdown-display" id="countdown-display"></div>
+
+        <div class="modal-actions">
+          <button id="cancel-quiz" class="btn btn-secondary">Cancel</button>
+          <button id="start-quiz-btn" class="btn btn-primary">Start</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirmation-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 id="confirmation-title">End Quiz?</h2>
+        <p id="confirmation-message">
+          Are you sure you want to exit the current quiz? Your progress will be
+          lost.
+        </p>
+        <div class="modal-actions">
+          <button id="confirm-no-btn" class="btn btn-secondary">Cancel</button>
+          <button id="confirm-yes-btn" class="btn btn-primary">
+            Yes, Exit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="results-modal" class="modal-overlay">
+      <div class="modal-content result-content">
+        <h2>Quiz Results</h2>
+        <div id="final-summary" class="summary-details"></div>
+
+        <p class="note-modal">
+          <small>Review your score and view the correct answers below.</small>
+        </p>
+
+        <div class="modal-actions result-actions">
+          <button id="view-answers-btn" class="btn btn-secondary">
+            View Answers
+          </button>
+          <button id="exit-to-menu-btn" class="btn btn-primary">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
